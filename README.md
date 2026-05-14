@@ -15,6 +15,33 @@
 - `usermode/`：用户态控制与命令入口
 - `system.*` / `entities.*` / `renderer.*`：运行时系统、实体处理与渲染组织
 
+### 反作弊视角
+
+从防守研究角度看，本项目可用于分析“用户态可见性”与“底层可见性”差异带来的检测盲区：
+
+- 帮助研究者理解仅依赖用户态采样时可能遗漏的对象与行为
+- 帮助反作弊工程师设计跨层一致性校验（user/kernel/hypervisor 视角对比）
+- 帮助蓝队建立针对异常绘制链路、异常数据读取链路的告警规则
+
+### 可能作用与用途（防守用途）
+
+- 作为教学样例：演示多模块协作的工程化组织
+- 作为实验基线：对比不同采集路径在完整性和时效性上的差异
+- 作为检测设计输入：提炼可观测特征（线程行为、调用路径、数据访问节奏）
+
+### 核心原理（高层）
+
+1. 分层采集：由用户态控制层驱动，结合底层通信获取目标运行态数据
+2. 数据整形：将底层采样结果映射为可渲染实体与状态
+3. 可视化输出：通过 overlay/UI 管线展示结果，用于验证采集与判断逻辑
+4. 反馈闭环：根据观测结果反向调整检测策略与采样策略
+
+### 防守研究建议
+
+- 建立跨层遥测：同一对象在不同层的状态应可相互验证
+- 引入时间序列特征：关注高频、规则化、低抖动的数据访问模式
+- 加强完整性监控：重点监控关键模块加载链与通信路径变更
+
 ### 研究目标
 
 - 研究用户态与底层组件之间的接口组织
@@ -39,6 +66,33 @@
 - `hypercall/`: low-level communication related logic
 - `usermode/`: user-mode control and command entry
 - `system.*` / `entities.*` / `renderer.*`: runtime system, entity processing, and rendering flow
+
+### Anti-Cheat Perspective
+
+From a defensive research perspective, this project helps analyze detection blind spots caused by visibility gaps between user-mode and lower layers:
+
+- Understand what may be missed when detection relies only on user-mode sampling
+- Design cross-layer consistency checks (user/kernel/hypervisor viewpoints)
+- Build blue-team alerts for abnormal rendering pipelines and abnormal data-access paths
+
+### Potential Value and Use Cases (Defensive)
+
+- Teaching sample for multi-module collaboration and engineering structure
+- Experimental baseline for comparing collection paths by integrity and timeliness
+- Detection-design input by extracting observable features (thread behavior, call paths, access cadence)
+
+### Core Principles (High Level)
+
+1. Layered collection driven by a user-mode control layer and low-level communication
+2. Data normalization that maps low-level samples into renderable entities/states
+3. Visual output through overlay/UI pipeline to validate collection and decision logic
+4. Feedback loop to refine detection and sampling strategies
+
+### Defensive Research Recommendations
+
+- Build cross-layer telemetry for object state consistency checks
+- Add time-series features for high-frequency and low-jitter access patterns
+- Strengthen integrity monitoring around key module loading and communication paths
 
 ### Research Focus
 
@@ -176,3 +230,4 @@ Some keys, certificates, executable chains, and bypass/injection deliverables ar
 Dự án chỉ phục vụ nghiên cứu bảo mật và trao đổi kỹ thuật, không dùng cho môi trường chưa được ủy quyền.
 
 Một số khóa, chứng chỉ, chuỗi thực thi và sản phẩm bypass/injection là thông tin nhạy cảm nên không công khai trên GitHub. Nếu cần trao đổi sâu hơn, vui lòng liên hệ Discord chính thức của chúng tôi.
+
